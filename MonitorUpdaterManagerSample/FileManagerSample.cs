@@ -44,6 +44,7 @@ namespace Sample
                 catch
                 {
                     Log.Info("Algunos archivos no pudieron ser limpiados");
+                    Console.WriteLine("Algunos archivos no pudieron ser limpiados");
                 }
             }
 
@@ -60,6 +61,7 @@ namespace Sample
             catch
             {
                 Log.Info("Algunos directorios no pudieron ser limpiados");
+                Console.WriteLine("Algunos directorios no pudieron ser limpiados");
             }
 
             try
@@ -76,6 +78,7 @@ namespace Sample
             catch
             {
                 Log.Error("Algunos directorios no pudieron ser limpiados");
+                Console.WriteLine("Algunos directorios no pudieron ser limpiados");
             }
 
             return string.Empty;
