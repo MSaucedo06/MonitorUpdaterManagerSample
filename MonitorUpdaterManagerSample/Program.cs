@@ -15,6 +15,9 @@
         const string MonitorUpdatesPath = "/tmp";
         public const string UpdaterMonitorFolder = "actualizaciones";
         public static string InstalledRollbackFilesPath = "/tmp";
+        public static string monitorFilesLocation = System.IO.Directory.GetCurrentDirectory() + "\\files\\";
+        public static string installationFolder = System.IO.Directory.GetCurrentDirectory() + "\\installation\\";
+        public static string version = "1.0";
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         
@@ -24,7 +27,7 @@
 
         static void Main() 
         {
-            UpdateMonitor(System.IO.Directory.GetCurrentDirectory() + "\\files\\", System.IO.Directory.GetCurrentDirectory() + "\\installation\\", "1.0");
+            UpdateMonitor(monitorFilesLocation, installationFolder, version);
         }
         public static void UpdateMonitor(string monitorFilesLocation, string installationFolder, string version)
         {
@@ -33,6 +36,7 @@
                 var winServiceManager = new WindowsServiceManager();
 
                 Log.Info("Iniciando las actualizaciones al monitor...");
+                Console.WriteLine("Iniciando las actualizaciones al monitor...");
 
                 try
                 {
@@ -41,6 +45,7 @@
                     if (processes.Any())
                     {
                         Log.Info("Cerrando el monitor de actualizaciones...");
+                        Console.WriteLine("Cerrando el monitor de actualizaciones...");
                         foreach (var proc in processes)
                         {
                             proc.Kill();
@@ -50,6 +55,7 @@
                 catch (Exception ex)
                 {
                     Log.Error("Ocurrió un error al intentar terminar el proceso del monitor de actualizaciones.", ex);
+                    Console.WriteLine("Ocurrió un error al intentar terminar el proceso del monitor de actualizaciones.");
                 }
 
                 var backupPath = System.IO.Path.Combine(MonitorUpdatesPath, "Backup", Guid.NewGuid().ToString().Replace("-", "").Substring(0, 6));
@@ -84,6 +90,7 @@
                 if (updateError)
                 {
                     Log.Info("Realizando rollback de las actualizaciones al monitor...");
+                    Console.WriteLine("Realizando rollback de las actualizaciones al monitor...");
 
                     result = fileManager.UpdateFiles(backupPath, installationFolder);
                     fileManager.RemoveDirectoryContents(backupPath);
@@ -92,10 +99,12 @@
                     {
                         Exception e = new Exception(result);
                         Log.Info("MonitorUpdater", e);
+                        Console.WriteLine("MonitorUpdater");
                     }
                     else
                     {
                         Log.Info("Terminado rollback de las actualizaciones al monitor...");
+                        Console.WriteLine("Terminado rollback de las actualizaciones al monitor...");
                     }
                     return;
                 }
@@ -107,10 +116,12 @@
 
                 ReleaseUpdateMonitorTask();
                 Log.Info("Actualizaciones al monitor terminadas...");
+                Console.WriteLine("Actualizaciones al monitor terminadas...");
             }
             catch (Exception ex)
             {
                 Log.Error("Ocurrió un error durante el proceso de actualización del Monitor.", ex);
+                Console.WriteLine("Ocurrió un error durante el proceso de actualización del Monitor.");
             }
         }
 
